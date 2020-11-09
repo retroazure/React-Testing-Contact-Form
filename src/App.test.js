@@ -1,29 +1,32 @@
 import React from "react";
-import * as rt from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import App from "./App";
 
 test("renders App without crashing", () => {
-  rt.render(<App />);
- })
+  render(<App />);
+ });
 
  test("Form submit displays its values", () => {
    
-  rt.render(<App />);
+  render(<App />);
 
-   const firstName = rt.screen.getByLabelText(/First Name/i);
-   const lastName = rt.screen.getByLabelText(/Last Name/i);
-   const email = rt.screen.getByLabelText(/Email/i);
-   const message = rt.screen.getByLabelText(/Message/i);
-   const submitButton = rt.screen.getByText(/submit/i);
+  //Getting all the input fields
+  const fnInput = screen.getByLabelText(/first name*/i);
+  const lsInput = screen.getByLabelText(/last name*/i);
+  const email = screen.getByLabelText(/email*/i);
+  const message = screen.getByLabelText(/message/i);
+  
+  //getting the submit field
+  const submit = screen.getByTestId(/submit/i);
+  
+  act(()=>{
+    fireEvent.change(fnInput, { target: { value: 'Ana' }});
+    fireEvent.change(lsInput, { target: { value: 'Winslow' }});
+    fireEvent.change(email, { target: { value: 'something@gmail.com' }});
+    fireEvent.change(message, { target: { value: "Hello World"}});
+    
+  });
 
-   rt.act(()=> {
-     rt.fireEvent.change(firstName, { target: { value: 'Ana' }});
-     rt.fireEvent.change(lastName, { target: { value: 'Maria' }});
-     rt.fireEvent.change(email, { target: { value: 'something@gmail.com' }});
-     rt.fireEvent.change(message, { target: { value: 'Hello World' }});
-
- });
-
- rt.fireEvent.click(submitButton);
-
+  fireEvent.click(submit);
+  
 });
